@@ -13,7 +13,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       height: 100vh;
     }
 
@@ -72,6 +72,15 @@
       align-items: center;
     }
 
+    .crossed-out {
+      text-decoration: line-through;
+      color: gray;
+    }
+
+    .highlighted {
+      background-color: #fffae6;
+    }
+
     .delete-icon {
       color: red;
       cursor: pointer;
@@ -89,7 +98,6 @@
       padding: 10px;
       border: 1px solid #ddd;
       border-radius: 5px;
-      cursor: grab;
       display: inline-block;
       min-width: 100px;
       text-align: center;
@@ -106,7 +114,7 @@
       display: none;
     }
 
-    .reuse-question {
+    .reuse-question, .show-choices-question {
       margin: 10px 0;
       padding: 10px;
       border: 1px solid #ccc;
@@ -120,6 +128,22 @@
       gap: 20px;
       justify-content: center;
     }
+
+    footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #555;
+    }
+
+    footer a {
+      color: #4285f4;
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
@@ -127,7 +151,6 @@
 
   <nav>
     <button id="choices-tab-btn" class="active" onclick="showTab('choices-tab')">Choices</button>
-    <button id="users-tab-btn" onclick="showTab('users-tab')">Users</button>
     <button id="picker-tab-btn" onclick="showTab('picker-tab')">Picker</button>
   </nav>
 
@@ -142,35 +165,39 @@
     <button onclick="resetChoices()">Reset Choices</button>
     <h3 id="choices-heading" class="hidden">Choices Entered</h3>
     <ul id="choices-list"></ul>
-  </div>
 
-  <!-- Users Tab -->
-  <div id="users-tab" class="tab-content hidden">
-    <h2>Users</h2>
-    <p class="instructions">
-      Enter a list of users below and click "Add Users" to include them. You can delete any user by clicking the "X" next to their name.
-    </p>
-    <textarea id="users-input" rows="5" cols="30" placeholder="Enter user names, one per line"></textarea><br>
-    <button onclick="addUsers()">Add Users</button>
-    <button onclick="resetUsers()">Reset Users</button>
-    <h3 id="users-heading" class="hidden">Users Entered</h3>
-    <ul id="users-list"></ul>
+    <!-- Show Choices Question -->
+    <div class="show-choices-question">
+      <p>Should the list of available choices be displayed on the Picker tab?</p>
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="show-choices" id="show-choices-yes" value="yes" checked>
+          Yes
+        </label>
+        <label>
+          <input type="radio" name="show-choices" id="show-choices-no" value="no">
+          No
+        </label>
+      </div>
+    </div>
   </div>
 
   <!-- Picker Tab -->
   <div id="picker-tab" class="tab-content hidden">
     <h2>Picker</h2>
     <p class="instructions">
-      Select a user from the dropdown, then click "Pick a Choice for User" to assign them a random choice. Drag and drop a choice box to another user box to reassign the choice to a new user.
+      Click "Pick a Choice" to randomly select a choice. Choices that have already been selected will be marked appropriately.
     </p>
-    <div>
-      <label for="user-select">Select a User:</label>
-      <select id="user-select"></select>
+
+    <!-- List of Choices -->
+    <div id="choices-on-picker-tab" class="hidden">
+      <h3>Available Choices</h3>
+      <ul id="picker-choices-list"></ul>
     </div>
 
     <!-- Reuse Choices Question -->
     <div id="reuse-question" class="reuse-question hidden">
-      <p>No more choices remain. Should choices be reused if users without choices remain?</p>
+      <p>No more choices remain. Should choices be reused?</p>
       <div class="radio-group">
         <label>
           <input type="radio" name="reuse" id="reuse-yes" value="yes">
@@ -183,22 +210,27 @@
       </div>
     </div>
 
-    <button onclick="pickForUser()">Pick a Choice for User</button>
+    <button onclick="pickChoice()">Pick a Choice</button>
     <button onclick="resetPicker()">Reset Picker</button>
     <div id="picker-display" class="hidden">No choice picked yet.</div>
-    <h3 id="picked-heading" class="hidden">Choices Associated with Users</h3>
+    <h3 id="picked-heading" class="hidden">Picked Choices</h3>
     <ul id="picked-list"></ul>
   </div>
+
+  <!-- Footer -->
+  <footer>
+    Designed by Katie Ravenwood. Was this script useful and easy to use? 
+    If so, you can <a href="https://buymeacoffee.com/katieravenwood" target="_blank">buy her a coffee</a> to say thanks!
+  </footer>
 
   <script>
     let originalChoices = [];
     let remainingChoices = [];
-    let users = [];
-    let pickedChoices = {}; // {user: choice}
+    let pickedChoices = []; // List of picked choices
 
     // Show a specific tab
     function showTab(tabId) {
-      const tabs = ["choices-tab", "users-tab", "picker-tab"];
+      const tabs = ["choices-tab", "picker-tab"];
       tabs.forEach(tab => {
         document.getElementById(tab).classList.add("hidden");
         document.getElementById(`${tab}-btn`).classList.remove("active");
@@ -207,6 +239,7 @@
       document.getElementById(`${tabId}-btn`).classList.add("active");
 
       if (tabId === "picker-tab") {
+        updatePickerChoicesList();
         updateReuseQuestionVisibility();
       }
     }
@@ -226,7 +259,7 @@
       if (confirm("Are you sure you want to reset all choices? This will also reset the picker.")) {
         originalChoices = [];
         remainingChoices = [];
-        pickedChoices = {};
+        pickedChoices = [];
         updateChoicesList();
         updatePickedList();
       }
@@ -257,96 +290,52 @@
       }
     }
 
-    // Add users from the textarea
-    function addUsers() {
-      const textarea = document.getElementById("users-input");
-      const newUsers = textarea.value.split("\n").map(user => user.trim()).filter(user => user);
-      users = [...users, ...newUsers];
-      updateUserList();
-      updateUserSelect();
-      textarea.value = "";
-    }
+    // Update choices list on Picker tab
+    function updatePickerChoicesList() {
+      const showChoicesYes = document.getElementById("show-choices-yes").checked;
+      const choicesOnPickerTab = document.getElementById("choices-on-picker-tab");
+      const pickerChoicesList = document.getElementById("picker-choices-list");
+      const reuseYes = document.getElementById("reuse-yes").checked;
 
-    // Reset users
-    function resetUsers() {
-      if (confirm("Are you sure you want to reset all users? This will also clear associated choices.")) {
-        users = [];
-        pickedChoices = {};
-        updateUserList();
-        updateUserSelect();
-        updatePickedList();
-      }
-    }
-
-    // Remove a user from the list
-    function removeUser(user) {
-      users = users.filter(u => u !== user);
-      delete pickedChoices[user];
-      updateUserList();
-      updateUserSelect();
-      updatePickedList();
-    }
-
-    // Update user list
-    function updateUserList() {
-      const usersList = document.getElementById("users-list");
-      const usersHeading = document.getElementById("users-heading");
-      usersList.innerHTML = "";
-
-      if (users.length === 0) {
-        usersHeading.classList.add("hidden");
-      } else {
-        usersHeading.classList.remove("hidden");
-        users.forEach(user => {
-          const li = document.createElement("li");
-          li.innerHTML = `<span>${user}</span><span class="delete-icon" onclick="removeUser('${user}')">X</span>`;
-          usersList.appendChild(li);
-        });
-      }
-    }
-
-    // Update user select dropdown
-    function updateUserSelect() {
-      const userSelect = document.getElementById("user-select");
-      userSelect.innerHTML = "";
-      users.forEach(user => {
-        const option = document.createElement("option");
-        option.value = user;
-        option.textContent = user;
-        userSelect.appendChild(option);
-      });
-    }
-
-    // Pick a choice for the selected user
-    function pickForUser() {
-      const userSelect = document.getElementById("user-select");
-      const user = userSelect.value;
-      if (!user) {
-        alert("Please select a user.");
+      if (!showChoicesYes) {
+        choicesOnPickerTab.classList.add("hidden");
         return;
       }
 
+      choicesOnPickerTab.classList.remove("hidden");
+      pickerChoicesList.innerHTML = "";
+
+      originalChoices.forEach(choice => {
+        const li = document.createElement("li");
+        li.textContent = choice;
+
+        if (!reuseYes && remainingChoices.indexOf(choice) === -1) {
+          li.classList.add("crossed-out");
+        } else if (reuseYes && pickedChoices.includes(choice)) {
+          li.classList.add("highlighted");
+        }
+
+        pickerChoicesList.appendChild(li);
+      });
+    }
+
+    // Pick a choice
+    function pickChoice() {
       const reuseYes = document.getElementById("reuse-yes").checked;
 
       if (remainingChoices.length === 0) {
         if (reuseYes && originalChoices.length > 0) {
           const randomIndex = Math.floor(Math.random() * originalChoices.length);
-          pickedChoices[user] = originalChoices[randomIndex];
+          pickedChoices.push(originalChoices[randomIndex]);
         } else {
           alert("No more choices to pick from!");
           return;
         }
       } else {
-        // Return previously assigned choice (if any) to remaining choices
-        if (pickedChoices[user]) {
-          remainingChoices.push(pickedChoices[user]);
-        }
         const randomIndex = Math.floor(Math.random() * remainingChoices.length);
-        pickedChoices[user] = remainingChoices.splice(randomIndex, 1)[0];
+        const picked = remainingChoices.splice(randomIndex, 1)[0];
+        pickedChoices.push(picked);
       }
-
-      // Remove "No choice picked yet" display
-      document.getElementById("picker-display").classList.add("hidden");
 
       updatePickedList();
     }
@@ -354,8 +343,7 @@
     // Reset picker
     function resetPicker() {
       remainingChoices = [...originalChoices];
-      pickedChoices = {};
-      document.getElementById("picker-display").classList.add("hidden");
+      pickedChoices = [];
       updatePickedList();
     }
 
@@ -365,63 +353,26 @@
       const pickedHeading = document.getElementById("picked-heading");
       pickedList.innerHTML = "";
 
-      if (Object.keys(pickedChoices).length === 0) {
+      if (pickedChoices.length === 0) {
         pickedHeading.classList.add("hidden");
       } else {
         pickedHeading.classList.remove("hidden");
-        Object.keys(pickedChoices).forEach(user => {
+        pickedChoices.forEach(choice => {
           const li = document.createElement("li");
-          const userBox = document.createElement("div");
-          const choiceBox = document.createElement("div");
-
-          userBox.textContent = user;
-          choiceBox.textContent = pickedChoices[user];
-
-          userBox.classList.add("item-box");
-          choiceBox.classList.add("item-box");
-          choiceBox.draggable = true;
-
-          // Drag and drop events
-          choiceBox.ondragstart = event => {
-            event.dataTransfer.setData("text/plain", user);
-          };
-          choiceBox.ondrop = event => {
-            const sourceUser = event.dataTransfer.getData("text/plain");
-            const targetUser = user;
-            if (sourceUser !== targetUser) {
-              const temp = pickedChoices[sourceUser];
-              pickedChoices[sourceUser] = pickedChoices[targetUser];
-              pickedChoices[targetUser] = temp;
-              updatePickedList();
-            }
-          };
-          choiceBox.ondragover = event => event.preventDefault();
-
-          const deleteIcon = document.createElement("span");
-          deleteIcon.textContent = "X";
-          deleteIcon.classList.add("delete-icon");
-          deleteIcon.onclick = () => {
-            remainingChoices.push(pickedChoices[user]);
-            delete pickedChoices[user];
-            updatePickedList();
-          };
-
-          li.appendChild(userBox);
-          li.appendChild(choiceBox);
-          li.appendChild(deleteIcon);
+          li.textContent = choice;
           pickedList.appendChild(li);
         });
       }
 
+      updatePickerChoicesList();
       updateReuseQuestionVisibility();
     }
 
-    // Show or hide the reuse question based on remaining choices and unassociated users
+    // Show or hide the reuse question based on remaining choices
     function updateReuseQuestionVisibility() {
       const reuseQuestion = document.getElementById("reuse-question");
-      const unassociatedUsers = users.filter(user => !pickedChoices[user]);
 
-      if (remainingChoices.length === 0 && unassociatedUsers.length > 0) {
+      if (remainingChoices.length === 0) {
         reuseQuestion.classList.remove("hidden");
       } else {
         reuseQuestion.classList.add("hidden");
