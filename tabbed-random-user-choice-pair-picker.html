@@ -77,6 +77,10 @@
       color: gray;
     }
 
+    .highlighted {
+      background-color: #fffae6;
+    }
+
     .delete-icon {
       color: red;
       cursor: pointer;
@@ -111,7 +115,7 @@
       display: none;
     }
 
-    .reuse-question, .show-users-question {
+    .reuse-question, .show-users-question, .show-choices-question {
       margin: 10px 0;
       padding: 10px;
       border: 1px solid #ccc;
@@ -163,6 +167,21 @@
     <button onclick="resetChoices()">Reset Choices</button>
     <h3 id="choices-heading" class="hidden">Choices Entered</h3>
     <ul id="choices-list"></ul>
+
+    <!-- Show Choices Question -->
+    <div class="show-choices-question">
+      <p>Should the list of available choices be displayed on the Picker tab?</p>
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="show-choices" id="show-choices-yes" value="yes" checked>
+          Yes
+        </label>
+        <label>
+          <input type="radio" name="show-choices" id="show-choices-no" value="no">
+          No
+        </label>
+      </div>
+    </div>
   </div>
 
   <!-- Users Tab -->
@@ -208,6 +227,12 @@
     <div id="users-on-picker-tab" class="hidden">
       <h3>Users</h3>
       <ul id="picker-users-list"></ul>
+    </div>
+
+    <!-- List of Choices -->
+    <div id="choices-on-picker-tab" class="hidden">
+      <h3>Available Choices</h3>
+      <ul id="picker-choices-list"></ul>
     </div>
 
     <!-- Reuse Choices Question -->
@@ -256,6 +281,7 @@
 
       if (tabId === "picker-tab") {
         updatePickerUsersList();
+        updatePickerChoicesList();
         updateReuseQuestionVisibility();
       }
     }
@@ -390,6 +416,35 @@
       });
     }
 
+    // Update choices list on Picker tab
+    function updatePickerChoicesList() {
+      const showChoicesYes = document.getElementById("show-choices-yes").checked;
+      const choicesOnPickerTab = document.getElementById("choices-on-picker-tab");
+      const pickerChoicesList = document.getElementById("picker-choices-list");
+      const reuseYes = document.getElementById("reuse-yes").checked;
+
+      if (!showChoicesYes) {
+        choicesOnPickerTab.classList.add("hidden");
+        return;
+      }
+
+      choicesOnPickerTab.classList.remove("hidden");
+      pickerChoicesList.innerHTML = "";
+
+      originalChoices.forEach(choice => {
+        const li = document.createElement("li");
+        li.textContent = choice;
+
+        if (!reuseYes && remainingChoices.indexOf(choice) === -1) {
+          li.classList.add("crossed-out");
+        } else if (reuseYes && pickedChoices[choice]) {
+          li.classList.add("highlighted");
+        }
+
+        pickerChoicesList.appendChild(li);
+      });
+    }
+
     // Pick a choice for the selected user
     function pickForUser() {
       const userSelect = document.getElementById("user-select");
@@ -487,6 +542,7 @@
       }
 
       updatePickerUsersList();
+      updatePickerChoicesList();
       updateReuseQuestionVisibility();
     }
 
