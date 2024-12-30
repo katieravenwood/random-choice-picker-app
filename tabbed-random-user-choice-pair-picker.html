@@ -72,6 +72,11 @@
       align-items: center;
     }
 
+    .crossed-out {
+      text-decoration: line-through;
+      color: gray;
+    }
+
     .delete-icon {
       color: red;
       cursor: pointer;
@@ -106,7 +111,7 @@
       display: none;
     }
 
-    .reuse-question {
+    .reuse-question, .show-users-question {
       margin: 10px 0;
       padding: 10px;
       border: 1px solid #ccc;
@@ -171,6 +176,21 @@
     <button onclick="resetUsers()">Reset Users</button>
     <h3 id="users-heading" class="hidden">Users Entered</h3>
     <ul id="users-list"></ul>
+
+    <!-- Show Users Question -->
+    <div class="show-users-question">
+      <p>Should the list of users be displayed on the Picker tab?</p>
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="show-users" id="show-users-yes" value="yes" checked>
+          Yes
+        </label>
+        <label>
+          <input type="radio" name="show-users" id="show-users-no" value="no">
+          No
+        </label>
+      </div>
+    </div>
   </div>
 
   <!-- Picker Tab -->
@@ -182,6 +202,12 @@
     <div>
       <label for="user-select">Select a User:</label>
       <select id="user-select"></select>
+    </div>
+
+    <!-- List of Users -->
+    <div id="users-on-picker-tab" class="hidden">
+      <h3>Users</h3>
+      <ul id="picker-users-list"></ul>
     </div>
 
     <!-- Reuse Choices Question -->
@@ -208,7 +234,7 @@
 
   <!-- Footer -->
   <footer>
-    Designed by Katie Ravenwood. Was this script useful and easy to use?
+    Designed by Katie Ravenwood. Was this script useful and easy to use? 
     If so, you can <a href="https://buymeacoffee.com/katieravenwood" target="_blank">buy her a coffee</a> to say thanks!
   </footer>
 
@@ -229,6 +255,7 @@
       document.getElementById(`${tabId}-btn`).classList.add("active");
 
       if (tabId === "picker-tab") {
+        updatePickerUsersList();
         updateReuseQuestionVisibility();
       }
     }
@@ -339,6 +366,30 @@
       });
     }
 
+    // Update users list on Picker tab
+    function updatePickerUsersList() {
+      const showUsersYes = document.getElementById("show-users-yes").checked;
+      const usersOnPickerTab = document.getElementById("users-on-picker-tab");
+      const pickerUsersList = document.getElementById("picker-users-list");
+
+      if (!showUsersYes) {
+        usersOnPickerTab.classList.add("hidden");
+        return;
+      }
+
+      usersOnPickerTab.classList.remove("hidden");
+      pickerUsersList.innerHTML = "";
+
+      users.forEach(user => {
+        const li = document.createElement("li");
+        li.textContent = user;
+        if (pickedChoices[user]) {
+          li.classList.add("crossed-out");
+        }
+        pickerUsersList.appendChild(li);
+      });
+    }
+
     // Pick a choice for the selected user
     function pickForUser() {
       const userSelect = document.getElementById("user-select");
@@ -435,6 +486,7 @@
         });
       }
 
+      updatePickerUsersList();
       updateReuseQuestionVisibility();
     }
 
