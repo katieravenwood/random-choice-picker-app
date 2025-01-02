@@ -56,8 +56,8 @@ This script is the basis for the white elephant-style picker below, but contains
 
 ## White Elephant Style Gift Picker
 
-**Code: Single File App in HTML**: [white-elephant-gift-picker.html](https://github.com/katieravenwood/random-choice-picker-app/blob/22206231d31b47bdd95a69cbcce1d0f36962ab8e/white-elephant-gift-picker.html)
-**Browser View**: [Random Choice Picker with User-Choice Pairing](https://htmlpreview.github.io/?https://github.com/katieravenwood/random-choice-picker-app/blob/main/white-elephant-gift-picker.html)
+- **Code: Single File App in HTML**: [white-elephant-gift-picker.html](https://github.com/katieravenwood/random-choice-picker-app/blob/22206231d31b47bdd95a69cbcce1d0f36962ab8e/white-elephant-gift-picker.html)
+- **Browser View**: [Random Choice Picker with User-Choice Pairing](https://htmlpreview.github.io/?https://github.com/katieravenwood/random-choice-picker-app/blob/main/white-elephant-gift-picker.html)
 
 This script allows the assignment of Gifts to Party Guests, and features a slightly different workflow than the above pickers:
 - The first Party Guest chosen automatically is paired with a gift. 
@@ -66,7 +66,7 @@ This script allows the assignment of Gifts to Party Guests, and features a sligh
 ## White Elephant Style Gift Picker with Theft Limit
 
 - **Code: Single File App in HTML**: [white-elephant-gif-picker-with-theft-limit.html](https://github.com/katieravenwood/random-choice-picker-app/blob/22206231d31b47bdd95a69cbcce1d0f36962ab8e/white-elephant-gift-picker-with-theft-limit.html)
-- **Browser View**: [White Elephant Gift Picker WIth Theft Limit](https://htmlpreview.github.io/?https://github.com/katieravenwood/random-choice-picker-app/blob/main/white-elephant-gif-picker-with-theft-limit.html)
+- **Browser View**: [White Elephant Gift Picker WIth Theft Limit](https://htmlpreview.github.io/?https://github.com/katieravenwood/random-choice-picker-app/blob/main/white-elephant-gift-picker-with-theft-limit.html)
 
 This script allows the assignment of Gifts to Party Guests like the version above, abut limits gift stealing on a per-gift basis to three thefts:
 - The first Party Guest chosen automatically is paired with a gift. 
