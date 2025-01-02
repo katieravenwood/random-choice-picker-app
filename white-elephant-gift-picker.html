@@ -134,7 +134,7 @@
   <div id="gifts-tab" class="tab-content">
     <h2>Gifts</h2>
     <p class="instructions">
-      Enter a list of gifts below and click "Add Gifts" to include them. You can delete any gift by clicking the "X" next to it.
+      Enter a list of gifts below (one per line) and click "Add Gifts" to include them. You can delete any gift by clicking the "X" next to it. Gift list may be reset entirely by clicking "Reset Gifts".
     </p>
     <textarea id="gifts-input" rows="5" cols="30" placeholder="Enter gifts, one per line"></textarea><br>
     <button onclick="addGifts()">Add Gifts</button>
@@ -147,7 +147,7 @@
   <div id="guests-tab" class="tab-content hidden">
     <h2>Party Guests</h2>
     <p class="instructions">
-      Enter a list of party guests below and click "Add Party Guests" to include them. You can delete any guest by clicking the "X" next to their name.
+      Enter a list of party guests below (one per line) and click "Add Party Guests" to include them. You can delete any guest by clicking the "X" next to their name. Guest List may be reset entirely by clicking "Reset Guests".
     </p>
     <textarea id="guests-input" rows="5" cols="30" placeholder="Enter guest names, one per line"></textarea><br>
     <button onclick="addGuests()">Add Party Guests</button>
@@ -165,21 +165,29 @@
         <option value="" selected disabled>Select A Guest</option>
       </select>
     </div>
+    
+    <!-- Display area for results and questions -->
     <div id="choice-message" class="choice-message hidden"></div>
+    
+    <!-- "Unwrap A Gift!" button for the first or straightforward unwrapping -->
     <button id="unwrap-button" class="hidden" onclick="assignGift('unwrap')">Unwrap A Gift!</button>
+
+    <!-- Action question for second and subsequent choices -->
     <div id="action-question" class="hidden">
       <div class="question">
-        Would you like to steal another guest's gift or unwrap a surprise gift?
+        Would you like to steal another guest's gift or unwrap a new gift?
       </div>
       <div class="radio-group">
         <label>
           <input type="radio" name="action" value="steal" onclick="handleActionSelection('steal')"> Steal another guest's gift!
         </label>
         <label>
-          <input type="radio" name="action" value="unwrap" onclick="handleActionSelection('unwrap')"> Unwrap a surprise gift!
+          <input type="radio" name="action" value="unwrap" onclick="handleActionSelection('unwrap')"> Unwrap a new gift!
         </label>
       </div>
     </div>
+
+    <!-- Steal container -->
     <div id="steal-container" class="hidden">
       <div class="question">
         Select A Guest To Steal From:
@@ -192,6 +200,8 @@
     <button id="unwrap-surprise-button" class="hidden" onclick="assignGift('unwrap')">Unwrap A Gift!</button>
     <h3 id="picked-heading" class="hidden">Gifts Assigned</h3>
     <ul id="picked-list"></ul>
+
+    <!-- No more gifts question -->
     <div id="no-gifts-question" class="hidden">
       <p class="question">
         There are no more Gifts left to be unwrapped! Should Gifts be reused if Guests without Gifts remain and no more choices are available?
@@ -225,6 +235,9 @@
     let pickedGifts = {}; // {guest: {gift, method}}
     let firstGuestAssigned = false;
 
+    //-----------
+    //   TABS
+    //-----------
     function showTab(tabId) {
       const tabs = ["gifts-tab", "guests-tab", "picker-tab"];
       tabs.forEach(tab => {
@@ -235,6 +248,10 @@
       document.getElementById(`${tabId}-btn`).classList.add("active");
     }
 
+
+    //-----------
+    // GIFT LOGIC
+    //-----------
     function addGifts() {
       const textarea = document.getElementById("gifts-input");
       const newGifts = textarea.value.split("\n").map(gift => gift.trim()).filter(gift => gift);
@@ -287,6 +304,9 @@
       updateGiftsList();
     }
 
+    //-----------
+    // GUEST LOGIC
+    //-----------
     function addGuests() {
       const textarea = document.getElementById("guests-input");
       const newGuests = textarea.value.split("\n").map(guest => guest.trim()).filter(guest => guest);
@@ -331,6 +351,9 @@
       updatePickedList();
     }
 
+    //-----------
+    //  PICKER LOGIC
+    //-----------
     function updateGuestSelect() {
       const guestSelect = document.getElementById("guest-select");
       guestSelect.innerHTML = '<option value="" selected disabled>Select A Guest</option>';
@@ -353,7 +376,7 @@
       const noMoreGiftsMessage = document.getElementById("no-more-gifts-message");
       const actionRadios = document.getElementsByName("action");
 
-      // Reset action selection
+      // Reset radio button selection, hide relevant containers
       actionRadios.forEach(radio => (radio.checked = false));
       document.getElementById("steal-container").classList.add("hidden");
       document.getElementById("unwrap-surprise-button").classList.add("hidden");
@@ -383,6 +406,7 @@
       noMoreGiftsMessage.classList.add("hidden");
 
       if (reuse) {
+        // Reuse logic
         const guest = guestSelect.value;
         const allGifts = Object.values(pickedGifts).map(entry => entry.gift);
         const randomGift = allGifts[Math.floor(Math.random() * allGifts.length)];
@@ -396,6 +420,7 @@
       }
     }
 
+    // Assign a gift from the remaining pool
     function assignGift(method) {
       const guestSelect = document.getElementById("guest-select");
       const guest = guestSelect.value;
@@ -434,6 +459,9 @@
       }
     }
 
+    //-----------
+    //   STEAL LOGIC
+    //-----------
     function populateStealDropdown() {
       const stealSelect = document.getElementById("steal-select");
       stealSelect.innerHTML = '<option value="" selected disabled>Select A Guest</option>';
@@ -462,13 +490,18 @@
 
       if (!currentGuest || !targetGuest) return;
 
+      // Retrieve gift from target
       const stolenGift = pickedGifts[targetGuest].gift;
+
+
+      // The target guest unwraps a new gift if remainingGifts are available
       const newGiftIndex = Math.floor(Math.random() * remainingGifts.length);
       const newGift = remainingGifts.splice(newGiftIndex, 1)[0];
 
       pickedGifts[currentGuest] = { gift: stolenGift, method: 'steal' };
       pickedGifts[targetGuest] = { gift: newGift, method: 'unwrap' };
 
+      // Show message
       const choiceMessage = document.getElementById("choice-message");
       choiceMessage.textContent = `${currentGuest} stole ${targetGuest}'s ${stolenGift} and ${targetGuest} unwrapped ${newGift}!`;
 
@@ -477,6 +510,9 @@
       resetPickerControls();
     }
 
+    //-----------
+    //   PICKER UI UTILS
+    //-----------
     function resetPickerControls() {
       document.getElementById("unwrap-button").classList.add("hidden");
       document.getElementById("action-question").classList.add("hidden");
@@ -495,7 +531,8 @@
       } else {
         pickedHeading.classList.remove("hidden");
         Object.keys(pickedGifts).forEach(guest => {
-          const { gift, method } = pickedGifts[guest];
+          const { gift, method } = pickedGifts[guest];          
+          // method: "steal" or "unwrap" or "reuse"
           const description = method === 'steal' ? `${guest} stole the ${gift}` : `${guest} unwrapped ${gift}`;
           const li = document.createElement("li");
           li.innerHTML = `${description} <span class="delete-icon" onclick="deletePair('${guest}')">X</span>`;
@@ -511,6 +548,9 @@
       updateGuestSelect();
     }
 
+    //-----------
+    //   REUSE & RESET
+    //-----------
     function resetPicker() {
       pickedGifts = {};
       remainingGifts = [...originalGifts];
