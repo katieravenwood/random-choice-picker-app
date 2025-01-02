@@ -33,7 +33,7 @@ The basic Tabbed Random Choice Picker script features the following options:
 ## Random Choice Picker with User-Choice Association
 
 - **Single File App In HTML**: [tabbed-random-user-choice-pair-picker.html](https://github.com/katieravenwood/random-choice-picker-app/blob/22206231d31b47bdd95a69cbcce1d0f36962ab8e/tabbed-random-user-choice-pair-picker.html)
-- **Browser View**: [Random Choice Picker with User-Choice Pairing](https://htmlpreview.github.io/?https://github.com/katieravenwood/blob/main/tabbed-random-user-choice-pair-picker.html)
+- **Browser View**: [Random Choice Picker with User-Choice Pairing](https://htmlpreview.github.io/?https://github.com/katieravenwood/random-choice-picker-app/blob/main/tabbed-random-user-choice-pair-picker.html)
 
 
 This script is the basis for the white elephant-style picker below, but contains a more generic workflow with the following options:
@@ -57,7 +57,7 @@ This script is the basis for the white elephant-style picker below, but contains
 ## White Elephant Style Gift Picker
 
 **Code: Single File App in HTML**: [white-elephant-gift-picker.html](https://github.com/katieravenwood/random-choice-picker-app/blob/22206231d31b47bdd95a69cbcce1d0f36962ab8e/white-elephant-gift-picker.html)
-**Browser View**: [Random Choice Picker with User-Choice Pairing](https://htmlpreview.github.io/?https://github.com/katieravenwood/blob/main/white-elephant-gift-picker.html)
+**Browser View**: [Random Choice Picker with User-Choice Pairing](https://htmlpreview.github.io/?https://github.com/katieravenwood/random-choice-picker-app/blob/main/white-elephant-gift-picker.html)
 
 This script allows the assignment of Gifts to Party Guests, and features a slightly different workflow than the above pickers:
 - The first Party Guest chosen automatically is paired with a gift. 
