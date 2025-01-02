@@ -1,5 +1,7 @@
 # Tabbed Random Choice Picker
 
+![White Elephant Gift Logo](White_Elephant_Logo.png)
+
 This is a nice little bit of code for spinning up a local or remote instance of a random choice picker, and can be used and customized in a multitude of ways to serve lots of quick needs.
 
 I spun it up when I needed a quick script for running a white elephant gift picker for one of my team's recent retros, and I figured sharing the love would be fun and helpful since what I needed wasn't out on the interwebs as a tutorial or general coding exercise.
