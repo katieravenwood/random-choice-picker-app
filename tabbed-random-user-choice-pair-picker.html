@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Random Choice Picker</title>
+  <title>Random Choice Picker With User-Choice Pairing</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -135,6 +135,7 @@
       text-align: center;
       font-size: 14px;
       color: #555;
+      padding-bottom: 20px;
     }
 
     footer a {
@@ -148,7 +149,7 @@
   </style>
 </head>
 <body>
-  <h1>Random Choice Picker</h1>
+  <h1>Random Choice Picker With User-Choice Pairing</h1>
 
   <nav>
     <button id="choices-tab-btn" class="active" onclick="showTab('choices-tab')">Choices</button>
@@ -269,6 +270,10 @@
     let users = [];
     let pickedChoices = {}; // {user: choice}
 
+    //-----------
+    //   TABS
+    //-----------
+
     // Show a specific tab
     function showTab(tabId) {
       const tabs = ["choices-tab", "users-tab", "picker-tab"];
@@ -285,6 +290,10 @@
         updateReuseQuestionVisibility();
       }
     }
+
+    // ----------
+    // CHOICES
+    // ----------
 
     // Add choices from the textarea
     function addChoices() {
@@ -331,6 +340,10 @@
         });
       }
     }
+
+    // ----------
+    // USERS
+    // ----------
 
     // Add users from the textarea
     function addUsers() {
@@ -391,6 +404,11 @@
         userSelect.appendChild(option);
       });
     }
+
+
+    // ----------
+    // PICKER LOGIC
+    // ----------
 
     // Update users list on Picker tab
     function updatePickerUsersList() {
@@ -545,6 +563,10 @@
       updatePickerChoicesList();
       updateReuseQuestionVisibility();
     }
+
+    // ----------
+    // REUSE LOGIC
+    // ----------
 
     // Show or hide the reuse question based on remaining choices and unassociated users
     function updateReuseQuestionVisibility() {

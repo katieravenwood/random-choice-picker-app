@@ -134,6 +134,7 @@
       text-align: center;
       font-size: 14px;
       color: #555;
+      padding-bottom: 20px;
     }
 
     footer a {
@@ -228,6 +229,10 @@
     let remainingChoices = [];
     let pickedChoices = []; // List of picked choices
 
+    //-----------
+    //   TABS
+    //-----------
+
     // Show a specific tab
     function showTab(tabId) {
       const tabs = ["choices-tab", "picker-tab"];
@@ -243,6 +248,10 @@
         updateReuseQuestionVisibility();
       }
     }
+
+    // ----------
+    // CHOICES
+    // ----------
 
     // Add choices from the textarea
     function addChoices() {
@@ -367,6 +376,10 @@
       updatePickerChoicesList();
       updateReuseQuestionVisibility();
     }
+
+    // ----------
+    // REUSE LOGIC
+    // ----------
 
     // Show or hide the reuse question based on remaining choices
     function updateReuseQuestionVisibility() {
