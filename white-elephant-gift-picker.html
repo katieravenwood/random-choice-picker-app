@@ -166,7 +166,7 @@
       </select>
     </div>
     <div id="choice-message" class="choice-message hidden"></div>
-    <button id="unwrap-button" class="hidden" onclick="assignGift()">Unwrap A Gift!</button>
+    <button id="unwrap-button" class="hidden" onclick="assignGift('unwrap')">Unwrap A Gift!</button>
     <div id="action-question" class="hidden">
       <div class="question">
         Would you like to steal another guest's gift or unwrap a surprise gift?
@@ -189,9 +189,25 @@
       </select>
       <button id="steal-button" class="hidden" onclick="stealGift()" disabled>Steal A Gift!</button>
     </div>
-    <button id="unwrap-surprise-button" class="hidden" onclick="assignGift()">Unwrap A Gift!</button>
+    <button id="unwrap-surprise-button" class="hidden" onclick="assignGift('unwrap')">Unwrap A Gift!</button>
     <h3 id="picked-heading" class="hidden">Gifts Assigned</h3>
     <ul id="picked-list"></ul>
+    <div id="no-gifts-question" class="hidden">
+      <p class="question">
+        There are no more Gifts left to be unwrapped! Should Gifts be reused if Guests without Gifts remain and no more choices are available?
+      </p>
+      <div class="radio-group">
+        <label>
+          <input type="radio" name="reuse-gifts" value="yes" onchange="handleReuseGifts(true)"> Yes
+        </label>
+        <label>
+          <input type="radio" name="reuse-gifts" value="no" onchange="handleReuseGifts(false)"> No
+        </label>
+      </div>
+    </div>
+    <div id="no-more-gifts-message" class="hidden">
+      <p>There are no more Gifts left to unwrap, add some more in the Gifts tab!</p>
+    </div>
     <div id="reset-picker-container" class="reset-picker-container hidden">
       <button onclick="resetPicker()">Reset Picker</button>
     </div>
@@ -206,7 +222,7 @@
     let originalGifts = [];
     let remainingGifts = [];
     let partyGuests = [];
-    let pickedGifts = {}; // {guest: gift}
+    let pickedGifts = {}; // {guest: {gift, method}}
     let firstGuestAssigned = false;
 
     function showTab(tabId) {
@@ -224,6 +240,7 @@
       const newGifts = textarea.value.split("\n").map(gift => gift.trim()).filter(gift => gift);
       originalGifts = [...originalGifts, ...newGifts];
       remainingGifts = [...remainingGifts, ...newGifts];
+      resetReuseLogic();
       updateGiftsList();
       textarea.value = "";
     }
@@ -233,9 +250,17 @@
         originalGifts = [];
         remainingGifts = [];
         pickedGifts = {};
+        resetReuseLogic();
         updateGiftsList();
         updatePickedList();
       }
+    }
+
+    function resetReuseLogic() {
+      const noGiftsQuestion = document.getElementById("no-gifts-question");
+      const reuseOptions = document.getElementsByName("reuse-gifts");
+      noGiftsQuestion.classList.add("hidden");
+      reuseOptions.forEach(option => (option.checked = false));
     }
 
     function updateGiftsList() {
@@ -258,6 +283,7 @@
     function deleteGift(gift) {
       originalGifts = originalGifts.filter(g => g !== gift);
       remainingGifts = remainingGifts.filter(g => g !== gift);
+      resetReuseLogic();
       updateGiftsList();
     }
 
@@ -323,6 +349,8 @@
       const unwrapButton = document.getElementById("unwrap-button");
       const actionQuestion = document.getElementById("action-question");
       const resetPickerContainer = document.getElementById("reset-picker-container");
+      const noGiftsQuestion = document.getElementById("no-gifts-question");
+      const noMoreGiftsMessage = document.getElementById("no-more-gifts-message");
       const actionRadios = document.getElementsByName("action");
 
       // Reset action selection
@@ -330,17 +358,45 @@
       document.getElementById("steal-container").classList.add("hidden");
       document.getElementById("unwrap-surprise-button").classList.add("hidden");
 
+      noGiftsQuestion.classList.add("hidden");
+      noMoreGiftsMessage.classList.add("hidden");
+
       if (guestSelect.value) {
-        if (!firstGuestAssigned) {
-          unwrapButton.classList.remove("hidden");
+        if (remainingGifts.length > 0) {
+          if (!firstGuestAssigned) {
+            unwrapButton.classList.remove("hidden");
+          } else {
+            actionQuestion.classList.remove("hidden");
+          }
         } else {
-          actionQuestion.classList.remove("hidden");
+          noGiftsQuestion.classList.remove("hidden");
         }
         resetPickerContainer.classList.remove("hidden");
       }
     }
 
-    function assignGift() {
+    function handleReuseGifts(reuse) {
+      const noMoreGiftsMessage = document.getElementById("no-more-gifts-message");
+      const noGiftsQuestion = document.getElementById("no-gifts-question");
+      const guestSelect = document.getElementById("guest-select");
+
+      noMoreGiftsMessage.classList.add("hidden");
+
+      if (reuse) {
+        const guest = guestSelect.value;
+        const allGifts = Object.values(pickedGifts).map(entry => entry.gift);
+        const randomGift = allGifts[Math.floor(Math.random() * allGifts.length)];
+        pickedGifts[guest] = { gift: randomGift, method: 'reuse' };
+        updatePickedList();
+        updateGuestSelect();
+        resetReuseLogic();
+      } else {
+        noGiftsQuestion.classList.add("hidden");
+        noMoreGiftsMessage.classList.remove("hidden");
+      }
+    }
+
+    function assignGift(method) {
       const guestSelect = document.getElementById("guest-select");
       const guest = guestSelect.value;
       const choiceMessage = document.getElementById("choice-message");
@@ -349,7 +405,7 @@
 
       const randomIndex = Math.floor(Math.random() * remainingGifts.length);
       const gift = remainingGifts.splice(randomIndex, 1)[0];
-      pickedGifts[guest] = gift;
+      pickedGifts[guest] = { gift, method };
 
       if (!firstGuestAssigned) {
         choiceMessage.textContent = `${guest} received ${gift}!`;
@@ -406,12 +462,12 @@
 
       if (!currentGuest || !targetGuest) return;
 
-      const stolenGift = pickedGifts[targetGuest];
+      const stolenGift = pickedGifts[targetGuest].gift;
       const newGiftIndex = Math.floor(Math.random() * remainingGifts.length);
       const newGift = remainingGifts.splice(newGiftIndex, 1)[0];
 
-      pickedGifts[currentGuest] = stolenGift;
-      pickedGifts[targetGuest] = newGift;
+      pickedGifts[currentGuest] = { gift: stolenGift, method: 'steal' };
+      pickedGifts[targetGuest] = { gift: newGift, method: 'unwrap' };
 
       const choiceMessage = document.getElementById("choice-message");
       choiceMessage.textContent = `${currentGuest} stole ${targetGuest}'s ${stolenGift} and ${targetGuest} unwrapped ${newGift}!`;
@@ -439,15 +495,17 @@
       } else {
         pickedHeading.classList.remove("hidden");
         Object.keys(pickedGifts).forEach(guest => {
+          const { gift, method } = pickedGifts[guest];
+          const description = method === 'steal' ? `${guest} stole the ${gift}` : `${guest} unwrapped ${gift}`;
           const li = document.createElement("li");
-          li.innerHTML = `${guest} received ${pickedGifts[guest]} <span class="delete-icon" onclick="deletePair('${guest}')">X</span>`;
+          li.innerHTML = `${description} <span class="delete-icon" onclick="deletePair('${guest}')">X</span>`;
           pickedList.appendChild(li);
         });
       }
     }
 
     function deletePair(guest) {
-      remainingGifts.push(pickedGifts[guest]);
+      remainingGifts.push(pickedGifts[guest].gift);
       delete pickedGifts[guest];
       updatePickedList();
       updateGuestSelect();
@@ -461,7 +519,9 @@
       resetPickerControls();
       updatePickedList();
       updateGuestSelect();
+      resetReuseLogic();
       document.getElementById("reset-picker-container").classList.add("hidden");
+      document.getElementById("no-more-gifts-message").classList.add("hidden");
     }
   </script>
 </body>
