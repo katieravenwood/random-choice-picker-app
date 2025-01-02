@@ -46,5 +46,5 @@ This script is the basis for the white elephant-style picker below, but contains
 This script allows the assignment of Gifts to Party Guests, and features a slightly different workflow than the above pickers:
 - The first Party Guest chosen automatically is paired with a gift. 
 - For each subsequent choice, the user is asked whether to Steal a gift from another user or select a new gift before the new assignment is made. 
-- Gifts may only be stolen and reassigned three times maximum, and a Steal Count is listed next to the Gift in the list.
-  - Once a Gift has been stolen three times, its assignment is locked and it cannot be reassigned.
+- To Be Added: *Gifts may only be stolen and reassigned three times maximum, and a Steal Count is listed next to the Gift in the list.*
+  - *Once a Gift has been stolen three times, its assignment is locked and it cannot be reassigned.*
