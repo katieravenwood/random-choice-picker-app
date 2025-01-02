@@ -11,7 +11,10 @@ If you find any of these scripts helpful and fun, I'm always up for [a coffee](h
 [!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/katieravenwood)
 
 
-## Random Choice Picker basic script
+## Basic Random Choice Picker 
+
+- **Single File App in HTML:** [tabbed-random-choice-picker.html](https://github.com/katieravenwood/random-choice-picker-app/blob/22206231d31b47bdd95a69cbcce1d0f36962ab8e/tabbed-random-choice-picker.html)
+- **Browser View**: [Basic Random Choice Picker Script](https://htmlpreview.github.io/?https://github.com/katieravenwood/random-choice-picker-app/blob/main/tabbed-random-choice-picker.html)
 
 The basic Tabbed Random Choice Picker script features the following options:
 
@@ -26,7 +29,12 @@ The basic Tabbed Random Choice Picker script features the following options:
   - Radio buttton array that displays only when all choices have been used that asks if choices may be reused
   - The pick list may be reset from within the picker tab while retaining the list of choices available on the choice list.
 
+
 ## Random Choice Picker with User-Choice Association
+
+- **Single File App In HTML**: [tabbed-random-user-choice-pair-picker.html](https://github.com/katieravenwood/random-choice-picker-app/blob/22206231d31b47bdd95a69cbcce1d0f36962ab8e/tabbed-random-user-choice-pair-picker.html)
+- **Browser View**: [Random Choice Picker with User-Choice Pairing](https://htmlpreview.github.io/?https://github.com/katieravenwood/blob/main/tabbed-random-user-choice-pair-picker.html)
+
 
 This script is the basis for the white elephant-style picker below, but contains a more generic workflow with the following options:
 
@@ -45,13 +53,20 @@ This script is the basis for the white elephant-style picker below, but contains
     - Choices may be dragged and dropped to a new user to swap choices with that user
     - The pick list may be reset from within the picker tab while retaining the list of choices available on the choice list.
 
-## White Elephant Style Picker
+
+## White Elephant Style Gift Picker
+
+**Code: Single File App in HTML**: [white-elephant-gift-picker.html](https://github.com/katieravenwood/random-choice-picker-app/blob/22206231d31b47bdd95a69cbcce1d0f36962ab8e/white-elephant-gift-picker.html)
+**Browser View**: [Random Choice Picker with User-Choice Pairing](https://htmlpreview.github.io/?https://github.com/katieravenwood/blob/main/white-elephant-gift-picker.html)
 
 This script allows the assignment of Gifts to Party Guests, and features a slightly different workflow than the above pickers:
 - The first Party Guest chosen automatically is paired with a gift. 
 - For each subsequent choice, the user is asked whether to Steal a gift from another user or select a new gift before the new assignment is made. 
 
-## White Elephant Sytle Picker with Theft Limit
+## White Elephant Sytle Gift Picker with Theft Limit
+
+- **Code: Single File App in HTML**: {white-elephant-gif-picker-with-theft-limit.html](https://github.com/katieravenwood/random-choice-picker-app/blob/22206231d31b47bdd95a69cbcce1d0f36962ab8e/white-elephant-gift-picker-with-theft-limit.html)
+- **Browser View**: [White Elephant Gift Picker WIth Theft Limit](https://htmlpreview.github.io/?https://github.com/katieravenwood/random-choice-picker-app/blob/main/white-elephant-gif-picker-with-theft-limit.html)
 
 This script allows the assignment of Gifts to Party Guests like the version above, abut limits gift stealing on a per-gift basis to three thefts:
 - The first Party Guest chosen automatically is paired with a gift. 
