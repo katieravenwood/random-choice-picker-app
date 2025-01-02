@@ -1,6 +1,6 @@
 # Tabbed Random Choice Picker
 
-![White Elephant Gift Logo](White_Elephant_Logo.png)
+<img src="White_Elephant_Logo.png" width="150")
 
 This is a nice little bit of code for spinning up a local or remote instance of a random choice picker, and can be used and customized in a multitude of ways to serve lots of quick needs.
 
