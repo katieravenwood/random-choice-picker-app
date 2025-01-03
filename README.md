@@ -14,7 +14,7 @@ The scripts are coded in HTML, CSS, and vanilla JavaScript, and are condensed in
     <td width=30%>
     If you find any of these scripts helpful and fun, I'm always up for <a href="https://buymeacoffee.com/katieravenwood" target="_blank">a coffee</a> and it would be greatly appreciated!<br />
 <br />
-<a href="https://www.buymeacoffee.com/katieravenwood" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee!">
+<a href="https://www.buymeacoffee.com/katieravenwood" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee!"></a>
     </td>
   </tr>
 </table>
