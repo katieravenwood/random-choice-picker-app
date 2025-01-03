@@ -75,3 +75,6 @@ This script allows the assignment of Gifts to Party Guests like the version abov
 - For each subsequent choice, the user is asked whether to Steal a gift from another user or select a new gift before the new assignment is made. 
 - Gifts may only be stolen and reassigned three times maximum, and a Steal Count is listed next to the Gift in the list.*
   - Once a Gift has been stolen three times, its assignment is locked and it cannot be reassigned.
+
+  ## Acknowledgements: 
+  - Service of browser previews: [GitHub & BitBucket Preview](https://htmlpreview.github.io/)
