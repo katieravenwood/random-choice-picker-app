@@ -1,17 +1,23 @@
 # Tabbed Random Choice Picker
 
-<img src="White_Elephant_Logo.png" width="150">
-
-This is a nice little bit of code for spinning up a local or remote instance of a random choice picker, and can be used and customized in a multitude of ways to serve lots of quick needs.
-
-I spun it up when I needed a quick script for running a white elephant gift picker for one of my team's recent retros, and I figured sharing the love would be fun and helpful since what I needed wasn't out on the interwebs as a tutorial or general coding exercise.
-
-The scripts are coded in HTML, CSS, and vanilla JavaScript, and are condensed into a single HTML file for ease of use-- you can simply download the HTML files and run them locally! 
-
-If you find any of these scripts helpful and fun, I'm always up for [a coffee](https://buymeacoffee.com/katieravenwood) and it would be greatly appreciated!
-
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/katieravenwood)
-
+<table style="border-style: none">
+  <tr>
+    <td width=70%%>
+      <img src="White_Elephant_Logo.png" width="150" align=left > This is a nice little bit of code for spinning up a local or remote instance of a random choice picker, and can be used and customized in a multitude of ways to serve lots of quick needs.<br />
+      <br />
+I spun it up when I needed a quick script for running a white elephant gift picker for one of my team's recent retros, and I figured sharing the love would be fun and helpful since what I needed wasn't out on the interwebs as a tutorial or general coding exercise.<br />
+      <br />
+The scripts are coded in HTML, CSS, and vanilla JavaScript, and are condensed into a single HTML file for ease of use-- you can simply download the HTML files and run them locally! <br />
+      <br />
+      There are four versions of the picker below, the first two with basic syntax and the last two set up as white elephant style gift exchange logic. Feel free to grab a script and make use of it!
+    </td>
+    <td width=30%>
+    If you find any of these scripts helpful and fun, I'm always up for <a href="https://buymeacoffee.com/katieravenwood" target="_blank">a coffee</a> and it would be greatly appreciated!<br />
+<br />
+<a href="https://www.buymeacoffee.com/katieravenwood" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee!">
+    </td>
+  </tr>
+</table>
 
 ## Basic Random Choice Picker 
 
@@ -76,5 +82,5 @@ This script allows the assignment of Gifts to Party Guests like the version abov
 - Gifts may only be stolen and reassigned three times maximum, and a Steal Count is listed next to the Gift in the list.*
   - Once a Gift has been stolen three times, its assignment is locked and it cannot be reassigned.
 
-  ## Acknowledgements: 
-  - Service of browser previews: [GitHub & BitBucket Preview](https://htmlpreview.github.io/)
+## Acknowledgements: 
+- Service of browser previews: [GitHub & BitBucket Preview](https://htmlpreview.github.io/)
