@@ -2,7 +2,7 @@
 
 <table style="border-style: none">
   <tr>
-    <td width=70%%>
+    <td width=70%>
       <img src="White_Elephant_Logo.png" width="150" align=left > This is a nice little bit of code for spinning up a local or remote instance of a random choice picker, and can be used and customized in a multitude of ways to serve lots of quick needs.<br />
       <br />
 I spun it up when I needed a quick script for running a white elephant gift picker for one of my team's recent retros, and I figured sharing the love would be fun and helpful since what I needed wasn't out on the interwebs as a tutorial or general coding exercise.<br />
@@ -14,8 +14,7 @@ The scripts are coded in HTML, CSS, and vanilla JavaScript, and are condensed in
     <td width=30%>
     If you find any of these scripts helpful and fun, I'm always up for <a href="https://buymeacoffee.com/katieravenwood" target="_blank">a coffee</a> and it would be greatly appreciated!<br />
 <br />
-<a href="https://www.buymeacoffee.com/katieravenwood" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee!"></a>
-      
+<a href="https://www.buymeacoffee.com/katieravenwood" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png" alt="Buy Me A Coffee!"></a>      
     </td>
   </tr>
 </table>
